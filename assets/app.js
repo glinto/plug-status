@@ -1,11 +1,16 @@
 const $spotstatus = {
     sentinel: undefined,
-    available: false
+    available: false,
+    interval: undefined,
+    registration: undefined,
 };
 const SPOT_URL = 'https://hr.rechargespots.eu/DuskyWebApi//noauthlocation?Id=275&isOldApi=false&UiCulture=en-GB&userActualGPSLatitude=43.51330215622098&userActualGPSLongitude=16.503646714095122';
 
 
 function notify(str) {
+    if ($spotstatus.registration === undefined) {
+        return;
+    }
     if (!("Notification" in window)) {
         // Check if the browser supports notifications
         log("This browser does not support desktop notification");
@@ -20,7 +25,7 @@ function notify(str) {
             .then((permission) => {
                 // If the user accepts, let's create a notification
                 if (permission === "granted") {
-                    const notification = new Notification(str);
+                    const notification = $spotstatus.registration.showNotification(str);
                     // …
                 }
             })
@@ -90,7 +95,7 @@ function fetchStatus() {
         if (freeSpots > 0) {
             log(`${freeSpots} of ${totalSpots} spots are free!`);
             if (!$spotstatus.available) {
-                notify(`There are ${freeSpots} of ${totalSpots} charging spots available`);
+                //Notify via service worker
             }
             $spotstatus.available = true;
             document.querySelector('div.donut').classList.add('donut-free');
@@ -110,8 +115,28 @@ function log(...args) {
     console.log(new Date().toISOString(), ...args);
 }
 
+function registerWorker() {
+    if ('serviceWorker' in navigator) {
+        return navigator.serviceWorker.register('assets/sw.js');
+    }
+    else {
+        return Promise.reject('ServiceWorker not supported')
+    }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
+
+    registerWorker()
+        .then((registration) => {
+            log('ServiceWorker registration successful with scope: ', registration.scope);
+            $spotstatus.registration = registration;
+        })
+        .catch((err) => {
+            log('ServiceWorker registration failed: ', err);
+        })
+        .finally(() => {
+            fetchStatus();
+            //$spotstatus.interval = setInterval(fetchStatus, 15000 * Math.random() + 45000);
+        });
     getWakeLock();
-    fetchStatus();
-    setInterval(fetchStatus, 15000 * Math.random() + 45000);
-})
+});
