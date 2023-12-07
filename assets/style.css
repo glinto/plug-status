@@ -1,0 +1,154 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400&display=swap');
+
+:root {
+    --background-color: #202020;
+    --text-color: rgba(255, 255, 255, 0.67);
+    --text-color-secondary: rgba(255, 255, 255, 0.33);
+    --theme-primary: hsl(187, 97%, 58%);
+    --theme-error: hsl(11, 80%, 58%);
+    --font-face: 'Poppins', sans-serif;
+    --headings-font-face: 'Poppins', sans-serif;
+    --font-size: 1em;
+}
+
+@media screen and (prefers-color-scheme: light) {
+    :root {
+        --background-color: #ffffff;
+        --theme-primary: hsl(187, 97%, 35%);
+        --text-color: #000;
+        --text-color-secondary: rgba(0, 0, 0, 0.33);
+    }
+}
+
+body {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    font: var(--font-size) var(--font-face);
+    margin: 0
+}
+
+p {
+    line-height: 1.15rem;
+}
+
+h1,
+h2,
+h3 {
+    font-family: var(--headings-font-face);
+    font-style: normal;
+    font-weight: normal;
+}
+
+a {
+    color: var(--theme-primary);
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+.mb-0 {
+    margin-bottom: 0;
+}
+
+.mb-1 {
+    margin-bottom: 1rem;
+}
+
+.mr-1 {
+    margin-right: 1rem;
+}
+
+.mt-0 {
+    margin-top: 0;
+}
+
+.mt-1 {
+    margin-top: 1rem;
+}
+
+.pt-025 {
+    padding-top: 0.25rem;
+}
+
+.w-100 {
+    width: 100%;
+}
+
+.h-100 {
+    height: 100%;
+}
+
+.flex {
+    display: flex;
+}
+
+.flex-column {
+    flex-direction: column;
+}
+
+.flex-justify-center {
+    justify-content: center;
+}
+
+.flex-align-center {
+    align-items: center;
+}
+
+.flex-wrap {
+    flex-wrap: wrap;
+}
+
+.flex-grow-1 {
+    flex-grow: 1;
+}
+
+.v-hidden {
+    visibility: hidden;
+}
+
+.app {
+    max-width: 640px;
+    padding: 0 1em;
+}
+
+
+div.donut-content {
+    position: absolute;
+    width: 14rem;
+    height: 14rem;
+    box-sizing: border-box;
+    font-size: 0.8em;
+}
+
+.donut-content div:nth-child(1) {
+    font-size: 3rem;
+}
+
+.donut {
+    width: 14rem;
+    height: 14rem;
+    border: 1rem solid var(--theme-error);
+    border-radius: 50%;
+    box-sizing: border-box;
+}
+
+.donut-free {
+    animation: donut-pulse 1s ease-in-out infinite;
+    border-color: var(--theme-primary);
+}
+
+@keyframes donut-pulse {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.1);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
