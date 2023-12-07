@@ -95,7 +95,7 @@ function fetchStatus() {
         if (freeSpots > 0) {
             log(`${freeSpots} of ${totalSpots} spots are free!`);
             if (!$spotstatus.available) {
-                //Notify via service worker
+                notify(`${freeSpots} of ${totalSpots} spots are available`);
             }
             $spotstatus.available = true;
             document.querySelector('div.donut').classList.add('donut-free');
@@ -136,7 +136,7 @@ document.addEventListener('DOMContentLoaded', () => {
         })
         .finally(() => {
             fetchStatus();
-            //$spotstatus.interval = setInterval(fetchStatus, 15000 * Math.random() + 45000);
+            $spotstatus.interval = setInterval(fetchStatus, 15000 * Math.random() + 45000);
         });
     getWakeLock();
 });
