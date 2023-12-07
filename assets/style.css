@@ -48,6 +48,10 @@ a:hover {
     text-decoration: underline;
 }
 
+.small {
+    font-size: 0.8rem;
+}
+
 .mb-0 {
     margin-bottom: 0;
 }
@@ -111,6 +115,7 @@ a:hover {
 .app {
     max-width: 640px;
     padding: 0 1em;
+    height: 100%;
 }
 
 
@@ -119,7 +124,6 @@ div.donut-content {
     width: 14rem;
     height: 14rem;
     box-sizing: border-box;
-    font-size: 0.8em;
 }
 
 .donut-content div:nth-child(1) {
