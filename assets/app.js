@@ -17,7 +17,7 @@ function notify(str) {
     } else if (Notification.permission === "granted") {
         // Check whether notification permissions have already been granted;
         // if so, create a notification
-        const notification = new Notification(str);
+        const notification = $spotstatus.registration.showNotification(str);
         // …
     } else if (Notification.permission !== "denied") {
         // We need to ask the user for permission
