@@ -6,7 +6,6 @@ const $spotstatus = {
 };
 const SPOT_URL = 'https://hr.rechargespots.eu/DuskyWebApi//noauthlocation?Id=275&isOldApi=false&UiCulture=en-GB&userActualGPSLatitude=43.51330215622098&userActualGPSLongitude=16.503646714095122';
 
-
 function notify(str) {
     if ($spotstatus.registration === undefined) {
         return;
@@ -17,7 +16,10 @@ function notify(str) {
     } else if (Notification.permission === "granted") {
         // Check whether notification permissions have already been granted;
         // if so, create a notification
-        const notification = $spotstatus.registration.showNotification(str);
+        const notification = $spotstatus.registration.showNotification(str, {
+            icon: 'assets/icon.svg',
+            vibrate: [200, 100, 200]
+        });
         // …
     } else if (Notification.permission !== "denied") {
         // We need to ask the user for permission
@@ -25,8 +27,10 @@ function notify(str) {
             .then((permission) => {
                 // If the user accepts, let's create a notification
                 if (permission === "granted") {
-                    const notification = $spotstatus.registration.showNotification(str);
-                    // …
+                    const notification = $spotstatus.registration.showNotification(str, {
+                        icon: 'assets/icon.svg',
+                        vibrate: [200, 100, 200]
+                    });
                 }
             })
             .catch((err) => {
@@ -137,7 +141,7 @@ document.addEventListener('DOMContentLoaded', () => {
         })
         .finally(() => {
             fetchStatus();
-            $spotstatus.interval = setInterval(fetchStatus, 15000 * Math.random() + 45000);
+            //$spotstatus.interval = setInterval(fetchStatus, 15000 * Math.random() + 45000);
         });
     getWakeLock();
 });
