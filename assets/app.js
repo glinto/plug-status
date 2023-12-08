@@ -110,6 +110,7 @@ function fetchStatus() {
             document.querySelector('div.donut').classList.remove('donut-free');
         }
         document.querySelector('div.donut-content').classList.remove('v-hidden');
+        showStatus(`Updated at ${new Date().toLocaleTimeString().slice(0, 5)}`);
     }).catch((err) => {
         log(err);
     })
@@ -145,3 +146,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     getWakeLock();
 });
+
+function showStatus(str) {
+    document.querySelector('div[data-label="log"]').textContent = str;
+}
