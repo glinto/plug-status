@@ -141,7 +141,7 @@ document.addEventListener('DOMContentLoaded', () => {
         })
         .finally(() => {
             fetchStatus();
-            //$spotstatus.interval = setInterval(fetchStatus, 15000 * Math.random() + 45000);
+            S$spotstatus.interval = setInterval(fetchStatus, 15000 * Math.random() + 45000);
         });
     getWakeLock();
 });
