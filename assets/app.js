@@ -113,7 +113,7 @@ function fetchStatus() {
 
 function log(...args) {
     console.log(new Date().toISOString(), ...args);
-    document.querySelector('div[data-label="log"]').innerHTML = args.join(' ');
+    //document.querySelector('div[data-label="log"]').innerHTML = args.join(' ');
 }
 
 function registerWorker() {
