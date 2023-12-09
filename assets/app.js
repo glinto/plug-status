@@ -42,11 +42,12 @@ function getWakeLock() {
     if ('wakeLock' in navigator) {
         navigator.wakeLock.request('screen')
             .then(wakeLock => {
-                log('Wake Lock is active');
+                log('Wake lock is active');
+                showStatus('Wake lock is active');
                 $spotstatus.sentinel = wakeLock;
                 $spotstatus.sentinel.addEventListener('release', () => {
-                    log('Wake Lock was released');
-                    sentinel = undefined;
+                    log('Wake lock was released');
+                    $spotstatus.sentinel = undefined;
                 });
             })
             .catch(err => {
@@ -140,6 +141,12 @@ document.addEventListener('DOMContentLoaded', () => {
             $spotstatus.interval = setInterval(fetchStatus, 15000 * Math.random() + 45000);
         });
     getWakeLock();
+});
+
+document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') {
+        getWakeLock();
+    }
 });
 
 function showStatus(str) {
