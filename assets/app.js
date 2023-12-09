@@ -126,7 +126,7 @@ function registerWorker() {
         return navigator.serviceWorker.register('assets/sw.js');
     }
     else {
-        return Promise.reject('ServiceWorker not supported')
+        return Promise.reject('ServiceWorker not supported');
     }
 }
 
@@ -134,7 +134,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     registerWorker()
         .then((registration) => {
-            log('ServiceWorker registration successful with scope: ', registration.scope);
+            log('ServiceWorker registration successful', registration);
             $spotstatus.registration = registration;
         })
         .catch((err) => {
