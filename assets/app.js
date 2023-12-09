@@ -16,10 +16,7 @@ function notify(str) {
     } else if (Notification.permission === "granted") {
         // Check whether notification permissions have already been granted;
         // if so, create a notification
-        const notification = $spotstatus.registration.showNotification(str, {
-            icon: 'assets/icon.svg',
-            vibrate: [200, 100, 200]
-        });
+        const notification = $spotstatus.registration.showNotification(str);
         // …
     } else if (Notification.permission !== "denied") {
         // We need to ask the user for permission
@@ -27,10 +24,7 @@ function notify(str) {
             .then((permission) => {
                 // If the user accepts, let's create a notification
                 if (permission === "granted") {
-                    const notification = $spotstatus.registration.showNotification(str, {
-                        icon: 'assets/icon.svg',
-                        vibrate: [200, 100, 200]
-                    });
+                    const notification = $spotstatus.registration.showNotification(str);
                 }
             })
             .catch((err) => {
