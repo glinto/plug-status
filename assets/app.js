@@ -104,7 +104,8 @@ function fetchStatus() {
             document.querySelector('div.donut').classList.remove('donut-free');
         }
         document.querySelector('div.donut-content').classList.remove('v-hidden');
-        showStatus(`Updated at ${new Date().toLocaleTimeString().slice(0, 5)}`);
+        const d = new Date();
+        showStatus(`Updated at ${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`);
     }).catch((err) => {
         log(err);
     })
