@@ -3,12 +3,13 @@
     "short_name": "PlugStatus",
     "display": "standalone",
     "version": "0.1.0",
+    "start_url": ".",
     "manifest_version": 2,
     "background_color": "#202020",
     "description": "Watch when a plug becomes available",
     "icons": [
         {
-            "src": "assets/icon.svg",
+            "src": "/assets/icon.svg",
             "sizes": "any"
         }
     ]
