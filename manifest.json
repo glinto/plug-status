@@ -1,0 +1,16 @@
+{
+    "name": "Plug Status",
+    "short_name": "PlugStatus",
+    "start_url": "https://glinto.github.io/plug-status/",
+    "display": "standalone",
+    "version": "0.1.0",
+    "manifest_version": 2,
+    "background_color": "#202020",
+    "description": "Watch when a plug becomes available",
+    "icons": [
+        {
+            "src": "assets/icon.svg",
+            "sizes": "any"
+        }
+    ]
+}
