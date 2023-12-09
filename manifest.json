@@ -1,7 +1,6 @@
 {
     "name": "Plug Status",
     "short_name": "PlugStatus",
-    "start_url": "https://glinto.github.io/plug-status/",
     "display": "standalone",
     "version": "0.1.0",
     "manifest_version": 2,
