@@ -38,9 +38,9 @@ function notify(str) {
 
 function getWakeLock() {
     if ($spotstatus.sentinel !== undefined)
-        return;
+        return Promise.resolve($spotstatus.sentinel);
     if ('wakeLock' in navigator) {
-        navigator.wakeLock.request('screen')
+        return navigator.wakeLock.request('screen')
             .then(wakeLock => {
                 log('Wake lock is active');
                 showStatus('Wake lock is active');
@@ -49,12 +49,11 @@ function getWakeLock() {
                     log('Wake lock was released');
                     $spotstatus.sentinel = undefined;
                 });
-            })
-            .catch(err => {
-                log(`${err.name}, ${err.message}`);
+                return wakeLock;
             });
     } else {
         console.warn('Wake lock API not supported.');
+        return Promise.reject('Wake lock API not supported.');
     }
 }
 
@@ -136,6 +135,14 @@ document.addEventListener('DOMContentLoaded', () => {
         .catch((err) => {
             log('ServiceWorker registration failed: ', err);
         })
+        .then(() => getWakeLock())
+        .catch((err) => {
+            log('WakeLock request failed: ', err);
+        })
+        .then(() => subscribe())
+        .catch((err) => {
+            log('Subscripton error', err);
+        })
         .finally(() => {
             fetchStatus();
             $spotstatus.interval = setInterval(fetchStatus, 15000 * Math.random() + 45000);
@@ -145,7 +152,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
 document.addEventListener('visibilitychange', () => {
     if (document.visibilityState === 'visible') {
-        getWakeLock();
+        getWakeLock()
+            .catch((err) => {
+                log('WakeLock request failed: ', err);
+            });
     }
 });
 
