@@ -3,7 +3,7 @@ import { NotificationWrapper } from './notification.js';
 import { SubscriptionWrapper } from './subscribe.js';
 import { log } from './log.js';
 
-const $spotstatus = {
+const $ = {
     sentinel: undefined,
     interval: undefined,
     registration: undefined,
@@ -14,17 +14,17 @@ const $spotstatus = {
 const SPOT_URL = 'https://hr.rechargespots.eu/DuskyWebApi//noauthlocation?Id=275&isOldApi=false&UiCulture=en-GB&userActualGPSLatitude=43.51330215622098&userActualGPSLongitude=16.503646714095122';
 
 function getWakeLock() {
-    if ($spotstatus.sentinel !== undefined)
-        return Promise.resolve($spotstatus.sentinel);
+    if ($.sentinel !== undefined)
+        return Promise.resolve($.sentinel);
     if ('wakeLock' in navigator) {
         return navigator.wakeLock.request('screen')
             .then(wakeLock => {
                 log('Wake lock is active');
                 showStatus('Wake lock is active');
-                $spotstatus.sentinel = wakeLock;
-                $spotstatus.sentinel.addEventListener('release', () => {
+                $.sentinel = wakeLock;
+                $.sentinel.addEventListener('release', () => {
                     log('Wake lock was released');
-                    $spotstatus.sentinel = undefined;
+                    $.sentinel = undefined;
                 });
                 return wakeLock;
             });
@@ -69,15 +69,15 @@ function fetchStatus() {
         document.querySelector('div[data-label="spot-count"]').innerHTML = `${freeSpots}/${totalSpots}`;
         if (freeSpots > 0) {
             log(`${freeSpots} of ${totalSpots} spots are free!`);
-            if (!$spotstatus.storage.get('available')) {
-                $spotstatus.notificationWrapper.notify(`${freeSpots} of ${totalSpots} spots are available`);
+            if (!$.storage.get('available')) {
+                $.notificationWrapper.notify(`${freeSpots} of ${totalSpots} spots are available`);
             }
-            $spotstatus.storage.set('available', true);
+            $.storage.set('available', true);
             document.querySelector('div.donut').classList.add('donut-free');
         }
         else {
             log(`All ${totalSpots} spots are taken`);
-            $spotstatus.storage.set('available', false);
+            $.storage.set('available', false);
             document.querySelector('div.donut').classList.remove('donut-free');
         }
         document.querySelector('div.donut-content').classList.remove('v-hidden');
@@ -106,9 +106,9 @@ document.addEventListener('DOMContentLoaded', () => {
     registerWorker()
         .then((registration) => {
             log('ServiceWorker registration successful', registration);
-            $spotstatus.notificationWrapper = new NotificationWrapper(registration);
-            $spotstatus.subscriptionWrapper = new SubscriptionWrapper(registration);
-            $spotstatus.registration = registration;
+            $.notificationWrapper = new NotificationWrapper(registration);
+            $.subscriptionWrapper = new SubscriptionWrapper(registration);
+            $.registration = registration;
         })
         .catch((err) => {
             log('ServiceWorker registration failed: ', err);
@@ -117,13 +117,13 @@ document.addEventListener('DOMContentLoaded', () => {
         .catch((err) => {
             log('WakeLock request failed: ', err);
         })
-        .then(() => $spotstatus.subscriptionWrapper.subscribe())
+        .then(() => $.subscriptionWrapper.subscribe())
         .catch((err) => {
             log('Subscripton error', err);
         })
         .finally(() => {
             fetchStatus();
-            $spotstatus.interval = setInterval(fetchStatus, 15000 * Math.random() + 45000);
+            $.interval = setInterval(fetchStatus, 15000 * Math.random() + 45000);
         });
 });
 
