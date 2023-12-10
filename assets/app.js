@@ -1,42 +1,14 @@
 import { LocalStorageMap } from './storage.js';
+import { NotificationWrapper } from './notification.js';
 const $spotstatus = {
     sentinel: undefined,
     available: false,
     interval: undefined,
     registration: undefined,
+    notificationWrapper: undefined,
     storage: new LocalStorageMap('state')
 };
 const SPOT_URL = 'https://hr.rechargespots.eu/DuskyWebApi//noauthlocation?Id=275&isOldApi=false&UiCulture=en-GB&userActualGPSLatitude=43.51330215622098&userActualGPSLongitude=16.503646714095122';
-
-function notify(str) {
-    if ($spotstatus.registration === undefined) {
-        return;
-    }
-    if (!("Notification" in window)) {
-        // Check if the browser supports notifications
-        log("This browser does not support desktop notification");
-    } else if (Notification.permission === "granted") {
-        // Check whether notification permissions have already been granted;
-        // if so, create a notification
-        const notification = $spotstatus.registration.showNotification(str);
-        // …
-    } else if (Notification.permission !== "denied") {
-        // We need to ask the user for permission
-        Notification.requestPermission()
-            .then((permission) => {
-                // If the user accepts, let's create a notification
-                if (permission === "granted") {
-                    const notification = $spotstatus.registration.showNotification(str);
-                }
-            })
-            .catch((err) => {
-                log('Notification permission', err);
-            });
-    }
-
-    // At last, if the user has denied notifications, and you
-    // want to be respectful there is no need to bother them anymore.
-}
 
 function getWakeLock() {
     if ($spotstatus.sentinel !== undefined)
@@ -95,7 +67,7 @@ function fetchStatus() {
         if (freeSpots > 0) {
             log(`${freeSpots} of ${totalSpots} spots are free!`);
             if (!$spotstatus.storage.get('available')) {
-                notify(`${freeSpots} of ${totalSpots} spots are available`);
+                $spotstatus.notificationWrapper.notify(`${freeSpots} of ${totalSpots} spots are available`);
             }
             $spotstatus.storage.set('available', true);
             document.querySelector('div.donut').classList.add('donut-free');
@@ -132,6 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
     registerWorker()
         .then((registration) => {
             log('ServiceWorker registration successful', registration);
+            $spotstatus.notificationWrapper = new NotificationWrapper(registration);
             $spotstatus.registration = registration;
         })
         .catch((err) => {
