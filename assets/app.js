@@ -1,8 +1,10 @@
+import { LocalStorageMap } from './storage.js';
 const $spotstatus = {
     sentinel: undefined,
     available: false,
     interval: undefined,
     registration: undefined,
+    storage: new LocalStorageMap('state')
 };
 const SPOT_URL = 'https://hr.rechargespots.eu/DuskyWebApi//noauthlocation?Id=275&isOldApi=false&UiCulture=en-GB&userActualGPSLatitude=43.51330215622098&userActualGPSLongitude=16.503646714095122';
 
@@ -92,15 +94,15 @@ function fetchStatus() {
         document.querySelector('div[data-label="spot-count"]').innerHTML = `${freeSpots}/${totalSpots}`;
         if (freeSpots > 0) {
             log(`${freeSpots} of ${totalSpots} spots are free!`);
-            if (!$spotstatus.available) {
+            if (!$spotstatus.storage.get('available')) {
                 notify(`${freeSpots} of ${totalSpots} spots are available`);
             }
-            $spotstatus.available = true;
+            $spotstatus.storage.set('available', true);
             document.querySelector('div.donut').classList.add('donut-free');
         }
         else {
             log(`All ${totalSpots} spots are taken`);
-            $spotstatus.available = false;
+            $spotstatus.storage.set('available', false);
             document.querySelector('div.donut').classList.remove('donut-free');
         }
         document.querySelector('div.donut-content').classList.remove('v-hidden');
@@ -147,7 +149,6 @@ document.addEventListener('DOMContentLoaded', () => {
             fetchStatus();
             $spotstatus.interval = setInterval(fetchStatus, 15000 * Math.random() + 45000);
         });
-    getWakeLock();
 });
 
 document.addEventListener('visibilitychange', () => {
