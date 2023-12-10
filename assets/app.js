@@ -1,5 +1,6 @@
 import { LocalStorageMap } from './storage.js';
 import { NotificationWrapper } from './notification.js';
+import { SubscriptionWrapper } from './subscribe.js';
 import { log } from './log.js';
 
 const $spotstatus = {
@@ -7,6 +8,7 @@ const $spotstatus = {
     interval: undefined,
     registration: undefined,
     notificationWrapper: undefined,
+    subscriptionWrapper: undefined,
     storage: new LocalStorageMap('state')
 };
 const SPOT_URL = 'https://hr.rechargespots.eu/DuskyWebApi//noauthlocation?Id=275&isOldApi=false&UiCulture=en-GB&userActualGPSLatitude=43.51330215622098&userActualGPSLongitude=16.503646714095122';
@@ -99,13 +101,13 @@ function showStatus(str) {
     document.querySelector('div[data-label="log"]').textContent = str;
 }
 
-
 document.addEventListener('DOMContentLoaded', () => {
 
     registerWorker()
         .then((registration) => {
             log('ServiceWorker registration successful', registration);
             $spotstatus.notificationWrapper = new NotificationWrapper(registration);
+            $spotstatus.subscriptionWrapper = new SubscriptionWrapper(registration);
             $spotstatus.registration = registration;
         })
         .catch((err) => {
@@ -115,7 +117,7 @@ document.addEventListener('DOMContentLoaded', () => {
         .catch((err) => {
             log('WakeLock request failed: ', err);
         })
-        .then(() => subscribe())
+        .then(() => $spotstatus.subscriptionWrapper.subscribe())
         .catch((err) => {
             log('Subscripton error', err);
         })
