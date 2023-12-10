@@ -1,8 +1,9 @@
 import { LocalStorageMap } from './storage.js';
 import { NotificationWrapper } from './notification.js';
+import { log } from './log.js';
+
 const $spotstatus = {
     sentinel: undefined,
-    available: false,
     interval: undefined,
     registration: undefined,
     notificationWrapper: undefined,
@@ -85,11 +86,6 @@ function fetchStatus() {
     })
 }
 
-function log(...args) {
-    console.log(new Date().toISOString(), ...args);
-    //document.querySelector('div[data-label="log"]').innerHTML = args.join(' ');
-}
-
 function registerWorker() {
     if ('serviceWorker' in navigator) {
         return navigator.serviceWorker.register('assets/sw.js');
@@ -98,6 +94,11 @@ function registerWorker() {
         return Promise.reject('ServiceWorker not supported');
     }
 }
+
+function showStatus(str) {
+    document.querySelector('div[data-label="log"]').textContent = str;
+}
+
 
 document.addEventListener('DOMContentLoaded', () => {
 
@@ -133,6 +134,5 @@ document.addEventListener('visibilitychange', () => {
     }
 });
 
-function showStatus(str) {
-    document.querySelector('div[data-label="log"]').textContent = str;
-}
+
+
